@@ -1,7 +1,2 @@
-class JLog
-
-  def self.test
-    puts "JLog test successful"
-  end
-
+module JLog
 end
