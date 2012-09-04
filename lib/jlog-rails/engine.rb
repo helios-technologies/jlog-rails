@@ -1,5 +1,5 @@
 module JLog
-  class JLogEngine < Rails::Engine
+  class Engine < Rails::Engine
     isolate_namespace JLog
   end
 end
