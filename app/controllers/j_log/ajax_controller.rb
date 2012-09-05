@@ -1,7 +1,7 @@
 module JLog
-  class LoggerController < ApplicationController
+  class AjaxController < ApplicationController
 
-    def log
+    def append
       message = params[:message]
       level_pattern = /([A-Z]*) - /
       level = message.match(level_pattern)[1]
