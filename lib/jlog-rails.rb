@@ -1,4 +1,1 @@
-require "jlog-rails/engine"
-
-module JLog
-end
+require "jlog/engine"

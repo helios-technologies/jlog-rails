@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path("lib/jlog-rails/version")
+require File.expand_path("lib/jlog/version")
 
 Gem::Specification.new do |s|
   s.name        = 'jlog-rails'
