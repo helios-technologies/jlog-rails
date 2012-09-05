@@ -1,12 +1,12 @@
-module JLog
+module Jlog
   class InstallGenerator < Rails::Generators::Base
 
-    desc "Install JLog engine"
+    desc "Install Jlog engine"
 
     def mount_engine
-      puts "Mounting JLog engine at /jlog in config/routes.rb"
+      puts "Mounting Jlog engine at /jlog in config/routes.rb"
       insert_into_file("config/routes.rb", :after => /routes\.draw\sdo\n/) do
-        %Q{\nmount JLog::Engine, at: '/jlog'\n}
+        %Q{\n  mount Jlog::Engine, at: '/jlog'\n}
       end
     end
 

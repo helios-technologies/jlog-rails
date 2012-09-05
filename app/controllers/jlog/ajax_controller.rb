@@ -1,4 +1,4 @@
-module JLog
+module Jlog
 
   class AjaxController < ActionController::Metal
     include ActionController::Rendering
