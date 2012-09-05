@@ -1,5 +1,7 @@
 module JLog
-  class AjaxController < ApplicationController
+
+  class AjaxController < ActionController::Metal
+    include ActionController::Rendering
 
     def append
       message = params[:message]
@@ -14,7 +16,9 @@ module JLog
         Rails.logger.warn(message)
       end
 
-      render json: {}, status: :ok
+      render text: 'ok', status: :ok
     end
+
   end
+
 end
