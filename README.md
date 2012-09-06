@@ -23,6 +23,9 @@ On the client-side:
 Changelog:
 ----------
 
+* 0.0.2
+  * Changed format of output message
+  * InstallGenerator now updates application.js
 * 0.0.1
   * Added InstallGenerator
   * Renamed JLog to Jlog
