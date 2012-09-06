@@ -5,9 +5,9 @@ module Jlog
 
     def append
       message = params[:message]
-      level_pattern = /([A-Z]*) - /
+      level_pattern = /^(DEBUG|INFO|WARN|ERROR|FATAL)/
       level = message.match(level_pattern)[1]
-      message = 'Client Log: ' << message
+      message = 'Client ' << message
 
       if ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'].include? level
         Rails.logger.send(level.downcase.to_sym, message)

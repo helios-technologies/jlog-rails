@@ -24,6 +24,12 @@
  * </pre>
  */
 
+/**
+*
+* @remixer Alexey Golubev mailto:oholubyev@heliostech.hk
+*
+**/
+
 function JLog(name) {
   var _currentLevel = JLog.ALL,
       _appenders = [new JLog.ConsoleAppender],
@@ -153,8 +159,8 @@ JLog.prototype._log = function() {
   if (this.isOn()) {
     var level = arguments[0],
         args = Array.prototype.slice.call(arguments[1]),
-        namePrefix = this.getName() ? this.getName() + ': ' : '',
-        msgString = level + ' - ' + namePrefix,
+        namePrefix = this.getName() ? '[' + this.getName() + ']' : '',
+        msgString = level + namePrefix + ': ',
         appenders = this.getAppenders();
 
     for (var i in args) {
