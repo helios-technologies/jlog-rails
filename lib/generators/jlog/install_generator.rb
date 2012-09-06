@@ -10,5 +10,11 @@ module Jlog
       end
     end
 
+    def include_js_file
+      append_to_file 'app/assets/javascripts/application.js' do
+        %Q{\n//\n//= require jlog}
+      end
+    end
+
   end
 end
