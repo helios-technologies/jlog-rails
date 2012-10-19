@@ -26,7 +26,7 @@
 
 /**
 *
-* @remixer Alexey Golubev mailto:oholubyev@heliostech.hk
+* @remixer Helios Technologies Ltd. mailto:contact@heliostech.fr
 *
 **/
 
@@ -125,6 +125,8 @@ JLog.ERROR  = 4;
 JLog.FATAL  = 5;
 JLog.NONE   = 6;
 
+JLog.VERSION = "0.0.3b3";
+
 JLog.prototype.debug = function() {
   if (this.getLevel() <= JLog.DEBUG) {
     this._log("DEBUG", arguments);
@@ -189,13 +191,72 @@ JLog.ConsoleAppender = function() {
 };
 
 JLog.AjaxAppender = function(url) {
-  var _url = url;
+  // Do we make more then 1 call at a time?
+	var waitForResponse = true;
+  // Current buffer of messages
+	var queuedLoggingEvents = [];
+  // Messages which should be sent
+	var queuedRequests = [];
+  // Maximum count of messages sent at a one time
+  var batchSize = 10;
+  // Are we currently sending something
+  var sending = false;
+  // Timeout between sending data
+  var timerInterval = 1000;
+
+  function scheduleSending() {
+    window.setTimeout(sendAllRemaining, timerInterval);
+  }
+
+  function sendRequest(postData, callback) {
+    $.post(url, postData, "json")
+      .complete(function() {
+        if(waitForResponse) sending = false;
+        if (callback) callback(true);
+      });
+  }
+
+  function sendAllRemaining() {
+    if(queuedLoggingEvents.length == 0) return;
+    var eventCopy = queuedLoggingEvents;
+    queuedLoggingEvents = [];
+    queuedRequests.push(eventCopy);
+    sendAll();
+  }
+
+  function preparePostData(data) { return { message:data }; }
+
+  function sendAll() {
+    if(waitForResponse && sending) return;
+    sending = true;
+    var currentRequestBatch;
+    if (waitForResponse) {
+      if (queuedRequests.length > 0) {
+        currentRequestBatch = queuedRequests.shift();
+        sendRequest(preparePostData(currentRequestBatch), sendAll);
+      } else {
+        sending = false;
+        scheduleSending();
+      }
+    } else {
+      // Rattle off all the requests without waiting to see the response
+      while ((currentRequestBatch = queuedRequests.shift())) {
+        sendRequest(preparePostData(currentRequestBatch));
+      }
+      sending = false;
+      scheduleSending();
+    }
+  }
+
+  scheduleSending();
 
   return {
     name: 'AjaxAppender',
 
     log: function(msg) {
-      $.post(_url, {message: msg});
+      queuedLoggingEvents.push(msg);
+      if (queuedLoggingEvents.length >= batchSize) sendAllRemaining();
+      else if(queuedLoggingEvents.length == 1) scheduleSending();
     }
   }
 };
