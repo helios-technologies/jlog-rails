@@ -23,6 +23,8 @@ On the client-side:
 Changelog:
 ----------
 
+* 0.0.3
+  * Adding bulk flush in the ajax appender
 * 0.0.2
   * Changed format of output message
   * InstallGenerator now updates application.js
