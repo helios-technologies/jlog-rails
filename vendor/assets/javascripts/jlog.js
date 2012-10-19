@@ -26,7 +26,7 @@
 
 /**
 *
-* @remixer Alexey-высокогорный-чай-Golubev mailto:oholubyev@heliostech.hk
+* @remixer Helios Technologies Ltd. mailto:contact@heliostech.fr
 *
 **/
 
@@ -125,7 +125,7 @@ JLog.ERROR  = 4;
 JLog.FATAL  = 5;
 JLog.NONE   = 6;
 
-JLog.VERSION = "0.0.3b1";
+JLog.VERSION = "0.0.3b3";
 
 JLog.prototype.debug = function() {
   if (this.getLevel() <= JLog.DEBUG) {
@@ -218,12 +218,9 @@ JLog.AjaxAppender = function(url) {
 
   function sendAllRemaining() {
     if(queuedLoggingEvents.length == 0) return;
-    var currentLoggingEvent;
-    var batchedLoggingEvents = [];
-    while ((currentLoggingEvent = queuedLoggingEvents.shift())) {
-      batchedLoggingEvents.push(currentLoggingEvent);
-    }
-    queuedRequests.push(batchedLoggingEvents);
+    var eventCopy = queuedLoggingEvents;
+    queuedLoggingEvents = [];
+    queuedRequests.push(eventCopy);
     sendAll();
   }
 
