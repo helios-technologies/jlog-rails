@@ -125,7 +125,6 @@ JLog.ERROR  = 4;
 JLog.FATAL  = 5;
 JLog.NONE   = 6;
 
-JLog.VERSION = "0.0.3b3";
 
 JLog.prototype.debug = function() {
   if (this.getLevel() <= JLog.DEBUG) {
@@ -172,22 +171,18 @@ JLog.prototype._log = function() {
     }
 
     msgString += args.join(', ');
-    for (var i in appenders) {
+    for(i = 0; i < appenders.length; ++i) {
       appenders[i].log(msgString);
     }
   }
 };
 
 JLog.ConsoleAppender = function() {
-  return {
-    name: 'ConsoleAppender',
+  this.name = 'ConsoleAppender';
 
-    log: function(msg) {
-      if (window.console) {
-        window.console.log(msg);
-      }
-    }
-  }
+  if(window.console && window.console.log)
+    this.log = function(msg) { window.console.log(msg); }
+  else this.log = function(msg) {};
 };
 
 JLog.AjaxAppender = function(url) {
