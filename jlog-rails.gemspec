@@ -4,7 +4,7 @@ require File.expand_path("lib/jlog/version")
 Gem::Specification.new do |s|
   s.name        = 'jlog-rails'
   s.version     = Jlog::VERSION
-  s.date        = '2012-10-18'
+  s.date        = '2012-10-24'
   s.summary     = "Jlog for Rails"
   s.description = "A lightweight JavaScript logger (for Rails)"
   s.authors     = ["Helios Technologies Ltd."]
