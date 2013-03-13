@@ -32,13 +32,17 @@
 
 function JLog(name) {
   var _currentLevel = JLog.ALL,
-      _appenders = [new JLog.ConsoleAppender],
+      _appenders = [new JLog.ConsoleAppender()],
       _name = null,
       _enabled = true;
 
   this.setName = function(name) {
     _name = name || null;
   };
+
+  if (name) {
+    this.setName(name);
+  }
 
   this.addAppender = function(appender) {
     if (appender) {
@@ -80,10 +84,9 @@ function JLog(name) {
         case 'all': _currentLevel = JLog.ALL; break;
         case 'debug': _currentLevel = JLog.DEBUG; break;
         case 'info': _currentLevel = JLog.INFO; break;
+        case 'warn': _currentLevel = JLog.WARN; break;
         case 'error': _currentLevel = JLog.ERROR; break;
         case 'fatal': _currentLevel = JLog.FATAL; break;
-        case 'warn': _currentLevel = JLog.WARN; break;
-        case 'none': // fall through to default
         default: _currentLevel = JLog.NONE;
       }
     } else {
@@ -111,11 +114,7 @@ function JLog(name) {
   this.getLevel = function() {
     return _currentLevel;
   };
-
-  if (name) {
-    this.setName(name);
-  }
-};
+}
 
 JLog.ALL    = 0;
 JLog.DEBUG  = 1;
@@ -180,18 +179,19 @@ JLog.prototype._log = function() {
 JLog.ConsoleAppender = function() {
   this.name = 'ConsoleAppender';
 
-  if(window.console && window.console.log)
-    this.log = function(msg) { window.console.log(msg); }
-  else this.log = function(msg) {};
+  if (window.console && window.console.log)
+    this.log = function(msg) { window.console.log(msg); };
+  else
+    this.log = function(msg) {};
 };
 
 JLog.AjaxAppender = function(url) {
   // Do we make more then 1 call at a time?
-	var waitForResponse = true;
+  var waitForResponse = true;
   // Current buffer of messages
-	var queuedLoggingEvents = [];
+  var queuedLoggingEvents = [];
   // Messages which should be sent
-	var queuedRequests = [];
+  var queuedRequests = [];
   // Maximum count of messages sent at a one time
   var batchSize = 10;
   // Are we currently sending something
@@ -206,23 +206,25 @@ JLog.AjaxAppender = function(url) {
   function sendRequest(postData, callback) {
     $.post(url, postData, "json")
       .complete(function() {
-        if(waitForResponse) sending = false;
+        if (waitForResponse) sending = false;
         if (callback) callback(true);
       });
   }
 
   function sendAllRemaining() {
-    if(queuedLoggingEvents.length == 0) return;
+    if (queuedLoggingEvents.length === 0) return;
     var eventCopy = queuedLoggingEvents;
     queuedLoggingEvents = [];
     queuedRequests.push(eventCopy);
     sendAll();
   }
 
-  function preparePostData(data) { return { message:data }; }
+  function preparePostData(data) {
+    return { message:data };
+  }
 
   function sendAll() {
-    if(waitForResponse && sending) return;
+    if (waitForResponse && sending) return;
     sending = true;
     var currentRequestBatch;
     if (waitForResponse) {
@@ -251,7 +253,7 @@ JLog.AjaxAppender = function(url) {
     log: function(msg) {
       queuedLoggingEvents.push(msg);
       if (queuedLoggingEvents.length >= batchSize) sendAllRemaining();
-      else if(queuedLoggingEvents.length == 1) scheduleSending();
+      else if (queuedLoggingEvents.length == 1) scheduleSending();
     }
-  }
+  };
 };

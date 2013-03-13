@@ -3,19 +3,21 @@ module Jlog
   class AjaxController < ActionController::Metal
     include ActionController::Rendering
 
-    def append
-      messages = params[:message]
-      messages = [messages] unless messages.is_a? Array
-      messages.each do |message|
-        level_pattern = /^(DEBUG|INFO|WARN|ERROR|FATAL)/
-        level = message.match(level_pattern)[1]
-        message = "#{Time.now} Client " << message
+    Levels = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL']
+    LevelsPattern = Regexp.new("^(#{Levels.join("|")})", Regexp::IGNORECASE)
 
-        if ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'].include? level
-          Rails.logger.send(level.downcase.to_sym, message)
+    def append
+      messages = Array(params[:message])
+      messages.each do |message|
+        path = request.original_fullpath
+        output = JLog.formatter(path).call(:path => path, :message => message)
+
+        if message =~ LevelsPattern
+          level = $1
+          JLog.logger(path).send(level.downcase.to_sym, output)
         else
-          Rails.logger.warn('*** Attempt to log with a nonexistent level ***')
-          Rails.logger.warn(message)
+          JLog.logger.warn('*** Attempt to log with a nonexistent level ***')
+          JLog.logger.warn(output)
         end
       end
 
