@@ -23,6 +23,12 @@ On the client-side:
 Changelog:
 ----------
 
+* 0.1.1
+  * Cleaned JLog.JS code
+* 0.1.0
+  * JLog rails engine can now be mounted several times
+  * Added ability to configure the ruby logger(s) and the output format(s)
+  * Fixed JSHint warnings
 * 0.0.3
   * Adding bulk flush in the ajax appender
 * 0.0.2

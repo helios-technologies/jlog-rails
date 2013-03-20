@@ -26,155 +26,158 @@
 
 /**
 *
-* @remixer Helios Technologies Ltd. mailto:contact@heliostech.fr
+* @remixer Helios Technologies mailto:contact@heliostech.fr
 *
 **/
 
 function JLog(name) {
-  var _currentLevel = JLog.ALL,
-      _appenders = [new JLog.ConsoleAppender()],
-      _name = null,
-      _enabled = true;
+  this._appenders.push(new JLog.ConsoleAppender());
+  this.setName(name);
+}
 
-  this.setName = function(name) {
-    _name = name || null;
-  };
+JLog.ALL   = 0;
+JLog.DEBUG = 1;
+JLog.INFO  = 2;
+JLog.WARN  = 3;
+JLog.ERROR = 4;
+JLog.FATAL = 5;
+JLog.NONE  = 6;
 
-  if (name) {
-    this.setName(name);
-  }
+JLog.prototype = {
+  _currentLevel: JLog.ALL,
+  _appenders: [],
+  _enabled: true,
+  _name: null,
 
-  this.addAppender = function(appender) {
-    if (appender) {
-      _appenders.push(appender);
+  debug: function() {
+    if (this.getLevel() <= JLog.DEBUG) {
+      this._log("DEBUG", arguments);
     }
-  };
+  },
 
-  this.removeAppender = function(name) {
+  info: function() {
+    if (this.getLevel() <= JLog.INFO) {
+      this._log("INFO", arguments);
+    }
+  },
+
+  warn: function() {
+    if (this.getLevel() <= JLog.WARN) {
+      this._log("WARN", arguments);
+    }
+  },
+
+  error: function() {
+    if (this.getLevel() <= JLog.ERROR) {
+      this._log("ERROR", arguments);
+    }
+  },
+
+  fatal: function() {
+    if (this.getLevel() <= JLog.FATAL) {
+      this._log("FATAL", arguments);
+    }
+  },
+
+  _log: function() {
+    if (this.isOn()) {
+      var level = arguments[0],
+      args = Array.prototype.slice.call(arguments[1] || []),
+      namePrefix = this.getName() ? '[' + this.getName() + ']' : '',
+      msgString = level + namePrefix + ': ',
+      appenders = this.getAppenders();
+
+      for (var i in args) {
+        if (typeof args[i] === 'object') {
+          args[i] = JSON.stringify(args[i]);
+        }
+      }
+
+      msgString += args.join(', ');
+      for(i = 0; i < appenders.length; ++i) {
+        appenders[i].log(msgString);
+      }
+    }
+  },
+
+  getName: function() {
+    return _name;
+  },
+
+  setName: function(name) {
+    _name = name || null;
+  },
+
+  addAppender: function(appender) {
+    if (appender) {
+      this._appenders.push(appender);
+    }
+  },
+
+  removeAppender: function(name) {
     for (var i in _appenders) {
-      if (_appenders[i].name === name) {
-        _appenders.splice(i, 1);
+      if (this._appenders[i].name === name) {
+        this._appenders.splice(i, 1);
       }
     }
     return null;
-  };
+  },
 
-  this.turnOn = function() {
-    _enabled = true;
-  };
+  turnOn: function() {
+    this._enabled = true;
+  },
 
-  this.turnOff = function() {
-    _enabled = false;
-  };
+  turnOff: function() {
+    this._enabled = false;
+  },
 
-  this.isOn = function() {
-    return _enabled;
-  };
+  isOn: function() {
+    return this._enabled;
+  },
 
-  // Sets the current threshold log level for this Log instance.  Only events that have a priority of this level or greater are logged.
-  this.setLevel = function(level) {
+  //
+  // Sets the current threshold log level for this Log instance.
+  // Only events that have a priority of this level or greater are logged.
+  //
+  setLevel: function(level) {
     if (typeof level === 'number') {
       if (level >= JLog.ALL && level <= JLog.NONE) {
-        _currentLevel = level;
+        this._currentLevel = level;
       } else {
-        _currentLevel = JLog.NONE;
+        this._currentLevel = JLog.NONE;
       }
     } else if (level) {
       switch(level) {
-        case 'all': _currentLevel = JLog.ALL; break;
-        case 'debug': _currentLevel = JLog.DEBUG; break;
-        case 'info': _currentLevel = JLog.INFO; break;
-        case 'warn': _currentLevel = JLog.WARN; break;
-        case 'error': _currentLevel = JLog.ERROR; break;
-        case 'fatal': _currentLevel = JLog.FATAL; break;
-        default: _currentLevel = JLog.NONE;
+        case 'all': this._currentLevel = JLog.ALL; break;
+        case 'debug': this._currentLevel = JLog.DEBUG; break;
+        case 'info': this._currentLevel = JLog.INFO; break;
+        case 'warn': this._currentLevel = JLog.WARN; break;
+        case 'error': this._currentLevel = JLog.ERROR; break;
+        case 'fatal': this._currentLevel = JLog.FATAL; break;
+        default: this._currentLevel = JLog.NONE;
       }
     } else {
-      _currentLevel = JLog.NONE;
+      this._currentLevel = JLog.NONE;
     }
-  };
+  },
 
-  this.getName = function() {
-    return _name;
-  };
-
-  this.getAppender = function(name) {
-    for (var i in _appenders) {
-      if (_appenders[i].name === name) {
-        return _appenders[i];
+  getAppender: function(name) {
+    for (var i in this._appenders) {
+      if (this._appenders[i].name === name) {
+        return this._appenders[i];
       }
     }
     return null;
-  };
+  },
 
-  this.getAppenders = function() {
-    return _appenders;
-  };
+  getAppenders: function() {
+    return this._appenders;
+  },
 
-  this.getLevel = function() {
-    return _currentLevel;
-  };
+  getLevel: function() {
+    return this._currentLevel;
+  }
 }
-
-JLog.ALL    = 0;
-JLog.DEBUG  = 1;
-JLog.INFO   = 2;
-JLog.WARN   = 3;
-JLog.ERROR  = 4;
-JLog.FATAL  = 5;
-JLog.NONE   = 6;
-
-
-JLog.prototype.debug = function() {
-  if (this.getLevel() <= JLog.DEBUG) {
-    this._log("DEBUG", arguments);
-  }
-};
-
-JLog.prototype.info = function() {
-  if (this.getLevel() <= JLog.INFO) {
-    this._log("INFO", arguments);
-  }
-};
-
-JLog.prototype.warn = function() {
-  if (this.getLevel() <= JLog.WARN) {
-    this._log("WARN", arguments);
-  }
-};
-
-JLog.prototype.error = function() {
-  if (this.getLevel() <= JLog.ERROR) {
-    this._log("ERROR", arguments);
-  }
-};
-
-JLog.prototype.fatal = function() {
-  if (this.getLevel() <= JLog.FATAL) {
-    this._log("FATAL", arguments);
-  }
-};
-
-JLog.prototype._log = function() {
-  if (this.isOn()) {
-    var level = arguments[0],
-        args = Array.prototype.slice.call(arguments[1]),
-        namePrefix = this.getName() ? '[' + this.getName() + ']' : '',
-        msgString = level + namePrefix + ': ',
-        appenders = this.getAppenders();
-
-    for (var i in args) {
-      if (typeof args[i] === 'object') {
-        args[i] = JSON.stringify(args[i]);
-      }
-    }
-
-    msgString += args.join(', ');
-    for(i = 0; i < appenders.length; ++i) {
-      appenders[i].log(msgString);
-    }
-  }
-};
 
 JLog.ConsoleAppender = function() {
   this.name = 'ConsoleAppender';
