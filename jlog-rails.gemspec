@@ -1,13 +1,14 @@
-# -*- encoding: utf-8 -*-
+# -*- RUBY -*-
 require File.expand_path("lib/jlog/version")
+require 'date'
 
 Gem::Specification.new do |s|
   s.name        = 'jlog-rails'
   s.version     = Jlog::VERSION
-  s.date        = '2012-10-24'
+  s.date        = Date.today.to_s
   s.summary     = "Jlog for Rails"
   s.description = "A lightweight JavaScript logger (for Rails)"
-  s.authors     = ["Helios Technologies Ltd."]
+  s.authors     = ["Helios Technologies"]
   s.email       = 'contact@heliostech.fr'
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
