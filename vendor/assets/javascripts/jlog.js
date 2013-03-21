@@ -207,11 +207,17 @@ JLog.AjaxAppender = function(url) {
   }
 
   function sendRequest(postData, callback) {
-    $.post(url, postData, "json")
-      .complete(function() {
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: postData,
+      dataType: 'json',
+      global: false,
+      complete: function() {
         if (waitForResponse) sending = false;
         if (callback) callback(true);
-      });
+      }
+    });
   }
 
   function sendAllRemaining() {

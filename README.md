@@ -22,7 +22,9 @@ On the client-side:
 
 Changelog:
 ----------
-
+* 0.1.3
+  * Set jQuery $.ajax 'global' setting to false to prevent the global handlers
+  like ajaxStart or ajaxStop from being triggered.
 * 0.1.1
   * Cleaned JLog.JS code
 * 0.1.0
