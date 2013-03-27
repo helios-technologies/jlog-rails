@@ -3,6 +3,8 @@ jlog-rails
 
 JLog - Rails integration with server side logger for JLog.js
 
+See docs: http://dimalev.github.com/jlog-rails/
+
 Usage:
 ------
 
@@ -16,12 +18,17 @@ then:
 
 On the client-side:
 
-    var logger = new JLog();
+    var logger = JLog.getLogger("package.class");
     logger.addAppender(new JLog.AjaxAppender('/jlog/append'));
     logger.warn('warning to be recorded in the server-side log');
 
 Changelog:
 ----------
+* 0.2.0 Switching to use log4javascript code base
+  * Adding LoggingEvent class to incapsulate log event.
+  * Adding appender and layout base classes for formatting and outputing log events.
+  * Pattern layout with custom fields.
+  * Logger error handler to handle errors inside logger. now, log call is safe :)
 * 0.1.3
   * Set jQuery $.ajax 'global' setting to false to prevent the global handlers
   like ajaxStart or ajaxStop from being triggered.
