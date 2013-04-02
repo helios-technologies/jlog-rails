@@ -85,7 +85,7 @@
     this.addChild = function(childLogger) {
       this.children.push(childLogger);
       childLogger.parent = this;
-      childLogger.invalidateAppenderCache();
+      childLogger._invalidateAppenderCache();
     };
 
     /*
@@ -154,7 +154,7 @@
 
     this._invalidateAppenderCache = function() {
       _appenderCacheInvalidated = true;
-      _.each(this.children, function(c) { c.invalidateAppenderCache(); });
+      _.each(this.children, function(c) { c._invalidateAppenderCache(); });
     };
 
     /*
@@ -325,7 +325,7 @@
 
       Checks if logger will publish message of <Level.FATAL>.
     */
-    : function() {
+    isFatalEnabled: function() {
       return this.isEnabledFor(JLog.Level.FATAL);
     }
   };

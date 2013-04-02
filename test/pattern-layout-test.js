@@ -1,6 +1,6 @@
 var id = 0;
 
-buster.testCase("Check room handlers", {
+buster.testCase("Check pattern layout", {
   setUp: function() {
     JLog.errorHandler = function(error) { throw error };
   },
@@ -27,5 +27,11 @@ buster.testCase("Check room handlers", {
     var res = pl.format(new JLog.LoggingEvent(JLog.getLogger("hi-log"), new Date(),
                                               JLog.Level.INFO, ["msg-msg"], null));
     assert.equals("hi-log [INFO] msg-msg", res, "Logger name and Level has to be printed");
+  },
+
+  "Startup time": function() {
+    var pl = new JLog.PatternLayout("%r");
+    var res = pl.format(new JLog.LoggingEvent(null, new Date(), JLog.Level.INFO, ["msg-msg"], null));
+    assert(/\d+/.test(res), "Startup time has to be printed");
   }
 });

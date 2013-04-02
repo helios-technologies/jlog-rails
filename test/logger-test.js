@@ -1,7 +1,7 @@
 // var buster = require("buster");
 
 var id = 0;
-buster.testCase("Check room handlers", {
+buster.testCase("Check logger main possibilities", {
   setUp: function() {
     JLog.handleError = function(error) { throw error };
   },

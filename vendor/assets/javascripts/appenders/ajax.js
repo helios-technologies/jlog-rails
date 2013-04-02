@@ -74,14 +74,77 @@ JLog.AjaxAppender = function(url) {
   scheduleSending();
 
   /*
+    Method: setWaitForResponce
+
+    If ajax appender has to make calls one by one, or it can do then concurrently.
+
+    Parameters:
+      waitForResponseParam - if should wait
+  */
+  this.setWaitForResponse = function(waitForResponseParam) {
+    waitForResponse = waitForResponseParam;
+  }
+
+  /*
+    Method: isWaitForResponse
+
+    Returns if ajax makes calls one at a time.
+  */
+  this.isWaitForResponse = function() {
+    return waitForResponse;
+  }
+
+  /*
+    Method: setBatchSize
+
+    Set single batch send size.
+
+    Parameters:
+      batchSizeParam - new size of batch
+  */
+  this.setBatchSize = function(batchSizeParam) {
+    batchSize = batchSizeParam;
+  }
+
+  /*
+    Method: getBatchSize
+
+    Return count of messages in batch.
+  */
+  this.getBatchSize = function() {
+    return batchSize;
+  }
+
+  /*
+    Method: setTimeout
+
+    Set buffering time before sending unfinished batch.
+
+    Parameters:
+      timeout - milliseconds
+  */
+  this.setBatchSize = function(timeout) {
+    timerInterval = timeout
+  }
+
+  /*
+    Method: setTimeout
+
+    Return timeout.
+  */
+  this.getBatchSize = function() {
+    return timerInterval;
+  }
+
+  /*
     Method: append
 
     Attempts to send message.
   */
   this.append = function(msg) {
     queuedLoggingEvents.push({level:msg.level.name, message:this.getLayout().format(msg)});
-    if (queuedLoggingEvents.length >= batchSize) sendAllRemaining();
-    else if (queuedLoggingEvents.length == 1) scheduleSending();
+    if(queuedLoggingEvents.length >= batchSize) sendAllRemaining();
+    else if(queuedLoggingEvents.length == 1) scheduleSending();
   }
 };
 

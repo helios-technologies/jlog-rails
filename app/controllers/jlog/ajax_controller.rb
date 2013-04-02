@@ -1,5 +1,3 @@
-require 'pp'
-
 module Jlog
 
   class AjaxController < ActionController::Metal

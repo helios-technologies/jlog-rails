@@ -132,7 +132,7 @@
           replacement = loggingEvent.level.name;
           break;
         case "r": // Milliseconds since log4javascript startup
-          replacement = "" + loggingEvent.timeStamp.getDifference(JLog.startup);
+          replacement = "" + (loggingEvent.timeStamp.getTime() - JLog.startup.getTime());
           break;
         case "%": // Literal % sign
           replacement = "%";
