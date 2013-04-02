@@ -70,7 +70,7 @@
     this.setAdditivity = function(additivity) {
       var valueChanged = (_additive != additivity);
       _additive = additivity;
-      if(valueChanged) this.invalidateAppenderCache();
+      if(valueChanged) this._invalidateAppenderCache();
     };
 
     /*
@@ -103,7 +103,7 @@
     this.addAppender = function(appender) {
       if(_appenders.indexOf(appender) >= 0) return;
       _appenders.push(appender);
-      this.invalidateAppenderCache();
+      this._invalidateAppenderCache();
     };
 
     /*
@@ -120,7 +120,7 @@
     */
     this.removeAppender = function(appender) {
       _appenders.splice(_appenders.indexOf(appender), 1);
-      this.invalidateAppenderCache();
+      this._invalidateAppenderCache();
     };
 
     /*
@@ -134,9 +134,14 @@
     */
     this.removeAllAppenders = function() {
       _appenders = [];
-      this.invalidateAppenderCache();
+      this._invalidateAppenderCache();
     };
 
+    /*
+      Method: getEffectiveAppenders
+
+      Returns all appender which will log given message.
+    */
     this.getEffectiveAppenders = function() {
       if (_appenderCache === null || _appenderCacheInvalidated) {
         // Build appender cache
@@ -147,14 +152,23 @@
       return _appenderCache;
     };
 
-    this.invalidateAppenderCache = function() {
+    this._invalidateAppenderCache = function() {
       _appenderCacheInvalidated = true;
       _.each(this.children, function(c) { c.invalidateAppenderCache(); });
     };
 
+    /*
+      Method: log
+
+      Publish logger message across all the appenders! Prefer using specialized function instead.
+
+      Parameters:
+        level - <Level> of message event
+        params - array of message parts. first parameter is usually a simple message.
+    */
     this.log = function(level, params) {
       try {
-        if(!(this.isOn() && level.isGreaterOrEqual(this.getEffectiveLevel()))) return;
+        if(!(this.isOn() && level.isGreaterOrEqual(this._getEffectiveLevel()))) return;
 
         params = Array.prototype.slice.call(params || []);
 
@@ -170,7 +184,7 @@
 
         var logEvent = new JLog.LoggingEvent(this, new Date(), level, messages, exception);
 
-        this.callAppenders(logEvent);
+        this._callAppenders(logEvent);
       } catch(loggerError) {
         JLog.handleError(loggerError);
         // TODO deal with errors inside logger - user of the logger should not know about such a bugs, unless explicitly
@@ -178,10 +192,18 @@
       }
     };
 
-    this.callAppenders = function(logEvent) {
+    this._callAppenders = function(logEvent) {
       _.each(this.getEffectiveAppenders(), function(app) { app.doAppend(logEvent); });
     };
 
+    /*
+      Method: setLevel
+
+      Set minimal level of log messages to populate.
+
+      Parameters:
+        level - minimal <Level>
+    */
     this.setLevel = function(level) {
       if(!(level instanceof JLog.Level)) throw new Error("Logger.setLevel: please use JLog.Level to set Level");
       // Having a level of null on the root logger would be very bad.
@@ -190,9 +212,14 @@
       _currentLevel = level;
     };
 
+    /*
+      Method: getLevel
+
+      Get minimal level of log messages to populate.
+    */
     this.getLevel = function() { return _currentLevel; };
 
-    this.getEffectiveLevel = function() {
+    this._getEffectiveLevel = function() {
       for(var logger = this; logger !== null; logger = logger.parent) {
         var level = logger.getLevel();
         if(level !== null) return level;
@@ -203,51 +230,117 @@
   };
 
   Logger.prototype = {
+    /*
+      Method: debug
+
+      Attempt to publish <Level.DEBUG> message.
+    */
     debug: function() {
       this.log(JLog.Level.DEBUG, arguments);
     },
 
+    /*
+      Method: info
+
+      Attempt to publish <Level.INFO> message.
+    */
     info: function() {
       this.log(JLog.Level.INFO, arguments);
     },
 
+    /*
+      Method: warn
+
+      Attempt to publish <Level.WARN> message.
+    */
     warn: function() {
       this.log(JLog.Level.WARN, arguments);
     },
 
+    /*
+      Method: error
+
+      Attempt to publish <Level.ERROR> message.
+    */
     error: function() {
       this.log(JLog.Level.ERROR, arguments);
     },
 
+    /*
+      Method: fatal
+
+      Attempt to publish <Level.FATAL> message.
+    */
     fatal: function() {
       this.log(JLog.Level.FATAL, arguments);
     },
 
+    /*
+      Method: isEnabledFor
+
+      Checks if logger will publish message of given <Level>.
+    */
     isEnabledFor: function(level) {
-      return level >= this.getEffectiveLevel();
+      return level >= this._getEffectiveLevel();
     },
 
+    /*
+      Method: isDebugEnabled
+
+      Checks if logger will publish message of <Level.DEBUG>.
+    */
     isDebugEnabled: function() {
       return this.isEnabledFor(JLog.Level.DEBUG);
     },
 
+    /*
+      Method: isInfoEnabled
+
+      Checks if logger will publish message of <Level.INFO>.
+    */
     isInfoEnabled: function() {
       return this.isEnabledFor(JLog.Level.INFO);
     },
 
+    /*
+      Method: isWarnEnabled
+
+      Checks if logger will publish message of <Level.WARN>.
+    */
     isWarnEnabled: function() {
       return this.isEnabledFor(JLog.Level.WARN);
     },
 
+    /*
+      Method: isErrorEnabled
+
+      Checks if logger will publish message of <Level.ERROR>.
+    */
     isErrorEnabled: function() {
       return this.isEnabledFor(JLog.Level.ERROR);
     },
 
-    isFatalEnabled: function() {
+    /*
+      Method: isFatalEnabled
+
+      Checks if logger will publish message of <Level.FATAL>.
+    */
+    : function() {
       return this.isEnabledFor(JLog.Level.FATAL);
     }
   };
 
+  /*
+    Method: getLogger
+
+    Returns instance of logger for given hierarchy.
+
+    Parameters:
+      loggerName - dot separated logger name.
+
+    Returns:
+      <Logger> for given name.
+  */
   JLog.getLogger = function(loggerName) {
     // Use anonymous logger if loggerName is not specified or invalid
     if (!(typeof loggerName == "string")) loggerName = anonymousLoggerName;

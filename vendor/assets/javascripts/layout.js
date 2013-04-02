@@ -2,7 +2,7 @@ JLog.Layout = function() {};
 /*
   Class: Layout
 
-  Handles message formatting.
+  Abstract class for message formatting.
 */
 JLog.Layout.prototype = {
   defaults: {
@@ -22,7 +22,7 @@ JLog.Layout.prototype = {
   exceptionKey: "exception",
   urlKey: "url",
   /*
-    Property: beachhead
+    Property: batchHeader
 
     Header of batch output.
 
@@ -58,7 +58,7 @@ JLog.Layout.prototype = {
   /*
     Method: format
 
-    Formats log message into a string.
+    Formats log message into a string. Has to be overloaded by derivative classes.
 
     Parameters:
       logMessage - Log Message to format.
@@ -98,11 +98,28 @@ JLog.Layout.prototype = {
     return true;
   },
 
+  /*
+    Method: getTimeStampValue
+
+    Returns string representation of time of event occurrence in seconds or milliseconds, depending on configuration.
+
+    Parameters:
+      loggingEvent - <LoggingEvent> to fetch timestamp.
+  */
   getTimeStampValue: function(loggingEvent) {
     return this.useTimeStampsInMilliseconds() ?
       loggingEvent.timeStampInMilliseconds : loggingEvent.timeStampInSeconds;
   },
 
+  /*
+    Method: getDataValues
+
+    Builds the map of log event environment.
+
+    Parameters:
+      loggingEvent - <LoggingEvent> to fetch data from.
+      combineMessages - Boolean, if messages should be combined into single String, or Array is required.
+  */
   getDataValues: function(loggingEvent, combineMessages) {
     var dataValues = [
       [this.loggerKey, loggingEvent.logger.name],
@@ -137,6 +154,20 @@ JLog.Layout.prototype = {
     return dataValues;
   },
 
+  /*
+    Method: setKeys
+
+    Sets key names for standard environment variables.
+
+    Parameters:
+      loggerKey - key for <Logger> name value
+      timeStampKey - key for timestamp value
+      levelKey - key for event <Level> value
+      messageKey - key for message value(s)
+      exceptionKey - key for exception value
+      urlKey - key for URL value
+      millisecondsKey - key for timestamp value in milliseconds
+  */
   setKeys: function(loggerKey, timeStampKey, levelKey, messageKey,
                     exceptionKey, urlKey, millisecondsKey) {
     this.loggerKey = extractStringFromParam(loggerKey, this.defaults.loggerKey);
@@ -148,6 +179,15 @@ JLog.Layout.prototype = {
     this.millisecondsKey = extractStringFromParam(millisecondsKey, this.defaults.millisecondsKey);
   },
 
+  /*
+    Method: setCustomField
+
+    Sets custom variable of the layout.
+
+    Parameters:
+      name - Key for custom field
+      value - Value for custom field
+  */
   setCustomField: function(name, value) {
     var fieldUpdated = false;
     for (var i = 0, len = this.customFields.length; i < len; i++) {
@@ -161,6 +201,11 @@ JLog.Layout.prototype = {
     }
   },
 
+  /*
+    Method: hasCustomFields
+
+    Checks, if there are any custom fields.
+  */
   hasCustomFields: function() {
     return (this.customFields.length > 0);
   },

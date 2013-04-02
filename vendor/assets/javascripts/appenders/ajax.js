@@ -1,3 +1,8 @@
+/*
+  Class: AjaxAppender
+
+  Ajax calls based appender.
+*/
 JLog.AjaxAppender = function(url) {
   this.name = 'AjaxAppender';
 
@@ -68,6 +73,11 @@ JLog.AjaxAppender = function(url) {
 
   scheduleSending();
 
+  /*
+    Method: append
+
+    Attempts to send message.
+  */
   this.append = function(msg) {
     queuedLoggingEvents.push({level:msg.level.name, message:this.getLayout().format(msg)});
     if (queuedLoggingEvents.length >= batchSize) sendAllRemaining();

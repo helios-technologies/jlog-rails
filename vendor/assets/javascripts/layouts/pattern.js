@@ -1,17 +1,59 @@
 (function() {
   var newLine = "\n";
 
+  /*
+    Class: PatternLayout
+
+    Pattern based layout.
+  */
+
+  /*
+    Constructor: PatternLayout
+
+    Initializes Pattern Layout. Recognizes patterns like %[padding][trunctaion](type)[specifier], where type can be:
+    - *a* - array of messages.
+    - *m* - prints all the messages. Objects are dumped to the _specifier_ depth.
+    - *c* - prints logger name
+    - *d* - prints log event date
+    - *f* - prints custom field defined by _specifier_
+    - *n* - prints new line
+    - *p* - prints log event level name
+    - *r* - prints time in seconds since JLog startup
+    - *%* - prints % sign
+
+    Parameters:
+      pattern - (optional) String format
+  */
   function PatternLayout(pattern) {
     if(pattern) this.pattern = pattern;
     else this.pattern = PatternLayout.DEFAULT_CONVERSION_PATTERN;
     this.customFields = [];
   }
 
+  /*
+    Constant: TTCC_CONVERSION_PATTERN
+
+    Usual verbose pattern.
+  */
   PatternLayout.TTCC_CONVERSION_PATTERN = "%r %p %c - %m%n";
+
+  /*
+    Constant: DEFAULT_CONVERSION_PATTERN
+
+    Default concise pattern.
+  */
   PatternLayout.DEFAULT_CONVERSION_PATTERN = "%m%n";
 
   PatternLayout.prototype = new JLog.Layout();
 
+  /*
+    Method: format
+
+    Formats event into string.
+
+    Parameters:
+      loggingEvent - <LoggingEvent> to format
+  */
   PatternLayout.prototype.format = function(loggingEvent) {
     var regex = /%(-?[0-9]+)?(\.?[0-9]+)?([acdfmMnpr%])(\{([^\}]+)\})?|([^%]+)/;
     var formattedString = "";
