@@ -25,10 +25,10 @@ On the client-side:
 Changelog:
 ----------
 * 0.2.0 Switching to use log4javascript code base
-  * Adding LoggingEvent class to incapsulate log event.
-  * Adding appender and layout base classes for formatting and outputing log events.
+  * Added LoggingEvent class to encapsulate log event.
+  * Added Appender and Layout base classes to format and output log events.
   * Pattern layout with custom fields.
-  * Logger error handler to handle errors inside logger. now, log call is safe :)
+  * Logger error handler to handle errors inside logger.
 * 0.1.3
   * Set jQuery $.ajax 'global' setting to false to prevent the global handlers
   like ajaxStart or ajaxStop from being triggered.

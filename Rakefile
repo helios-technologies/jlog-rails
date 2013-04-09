@@ -2,8 +2,9 @@ require 'bundler'
 
 Bundler::GemHelper.install_tasks
 
+desc 'Generate documentation'
 task :docs do
-  NATURAL_DOCS_EXEC = '/home/dima/downloads/NaturalDocs/NaturalDocs'
+  NATURAL_DOCS_EXEC = 'naturaldocs'
   JS_HOME = "vendor/assets/javascripts/"
   DOC_HOME= "docs/"
 

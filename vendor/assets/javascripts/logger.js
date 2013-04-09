@@ -1,14 +1,15 @@
 (function(JLog){
-   var anonymousLoggerName = "[anonymous]";
+  var anonymousLoggerName = "[anonymous]";
   var defaultLoggerName = "[default]";
   var rootLoggerName = "root";
 
   var loggers = {};
   var loggerNames = [];
 
-  var ROOT_LOGGER_DEFAULT_LEVEL = JLog.Level.DEBUG;
   var rootLogger = new Logger(rootLoggerName);
-  rootLogger.setLevel(ROOT_LOGGER_DEFAULT_LEVEL);
+  var rootLoggerDefaultLevel = JLog.Level.DEBUG;
+
+  rootLogger.setLevel(rootLoggerDefaultLevel);
   JLog.getRootLogger = function() {
     return rootLogger;
   };
@@ -360,7 +361,7 @@
       var parentLogger;
       if(lastDotIndex > -1) {
         var parentLoggerName = loggerName.substring(0, lastDotIndex);
-        parentLogger = JLog.getLogger(parentLoggerName); // Recursively sets up grandparents etc.
+        parentLogger = JLog.getLogger(parentLoggerName); // Recursively sets up parents etc.
       } else parentLogger = rootLogger;
       parentLogger.addChild(logger);
     }
