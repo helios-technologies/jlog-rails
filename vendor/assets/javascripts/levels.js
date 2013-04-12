@@ -15,7 +15,7 @@ JLog.Level = (function() {
   function Level(priority, name) {
     this.priority = priority;
     this.name = name;
-  };
+  }
 
   Level.prototype = {
     isGreaterOrEqual: function(otherLevel) {

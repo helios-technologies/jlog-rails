@@ -17,5 +17,4 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "jlog-rails"
 
   s.add_dependency "jquery-rails"
-  s.add_dependency "just_underscore"
 end

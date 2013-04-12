@@ -1,6 +1,4 @@
 (function() {
-  var newLine = "\n";
-
   /*
     Class: PatternLayout
 
@@ -126,7 +124,7 @@
           }
           break;
         case "n": // New line
-          replacement = newLine;
+          replacement = JLog.newLine;
           break;
         case "p": // Level
           replacement = loggingEvent.level.name;

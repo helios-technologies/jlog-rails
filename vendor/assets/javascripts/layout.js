@@ -132,7 +132,7 @@ JLog.Layout.prototype = {
       dataValues.push([this.millisecondsKey, loggingEvent.milliseconds]);
     }
     if(loggingEvent.exception) {
-      dataValues.push([this.exceptionKey, getExceptionStringRep(loggingEvent.exception)]);
+      dataValues.push([this.exceptionKey, JLog.getExceptionStringRep(loggingEvent.exception)]);
     }
     if(this.hasCustomFields()) {
       for(var i = 0, len = this.customFields.length; i < len; i++) {
@@ -145,7 +145,7 @@ JLog.Layout.prototype = {
             val = val(this, loggingEvent);
         } catch(e) {
           JLog.handleError(e);
-          val = "[Exception during evaluating]"
+          val = "[Exception during evaluating]";
         }
 
         dataValues.push([this.customFields[i].name, val]);

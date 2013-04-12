@@ -64,7 +64,7 @@ JLog.LoggingEvent.prototype = {
     Returns exception of the message as a String.
   */
   getThrowableStrRep: function() {
-    return this.exception ? getExceptionStringRep(this.exception) : "";
+    return this.exception ? JLog.getExceptionStringRep(this.exception) : "";
   },
 
   /*

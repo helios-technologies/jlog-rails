@@ -83,7 +83,7 @@ JLog.AjaxAppender = function(url) {
   */
   this.setWaitForResponse = function(waitForResponseParam) {
     waitForResponse = waitForResponseParam;
-  }
+  };
 
   /*
     Method: isWaitForResponse
@@ -92,7 +92,7 @@ JLog.AjaxAppender = function(url) {
   */
   this.isWaitForResponse = function() {
     return waitForResponse;
-  }
+  };
 
   /*
     Method: setBatchSize
@@ -104,7 +104,7 @@ JLog.AjaxAppender = function(url) {
   */
   this.setBatchSize = function(batchSizeParam) {
     batchSize = batchSizeParam;
-  }
+  };
 
   /*
     Method: getBatchSize
@@ -113,7 +113,7 @@ JLog.AjaxAppender = function(url) {
   */
   this.getBatchSize = function() {
     return batchSize;
-  }
+  };
 
   /*
     Method: setTimeout
@@ -124,8 +124,8 @@ JLog.AjaxAppender = function(url) {
       timeout - milliseconds
   */
   this.setBatchSize = function(timeout) {
-    timerInterval = timeout
-  }
+    timerInterval = timeout;
+  };
 
   /*
     Method: setTimeout
@@ -134,7 +134,7 @@ JLog.AjaxAppender = function(url) {
   */
   this.getBatchSize = function() {
     return timerInterval;
-  }
+  };
 
   /*
     Method: append
@@ -145,7 +145,7 @@ JLog.AjaxAppender = function(url) {
     queuedLoggingEvents.push({level:msg.level.name, message:this.getLayout().format(msg)});
     if(queuedLoggingEvents.length >= batchSize) sendAllRemaining();
     else if(queuedLoggingEvents.length == 1) scheduleSending();
-  }
+  };
 };
 
 JLog.AjaxAppender.prototype = new JLog.Appender();

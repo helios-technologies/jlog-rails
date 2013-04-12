@@ -22,8 +22,15 @@ On the client-side:
     logger.addAppender(new JLog.AjaxAppender('/jlog/append'));
     logger.warn('warning to be recorded in the server-side log');
 
+Dependencies:
+
+    Underscore.JS
+
 Changelog:
 ----------
+* 0.2.1 Bugfix
+  * Added helpers to format Error backtraces
+  * Removed the just_underscore dependancy from gemspecs
 * 0.2.0 Switching to use log4javascript code base
   * Added LoggingEvent class to encapsulate log event.
   * Added Appender and Layout base classes to format and output log events.

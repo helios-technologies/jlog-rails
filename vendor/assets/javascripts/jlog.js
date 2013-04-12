@@ -1,5 +1,6 @@
 //= include mount
 
+//= include helpers
 //= include levels
 //= include logger
 //= include logging_event

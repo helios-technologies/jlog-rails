@@ -41,7 +41,7 @@
     this.turnOff = function() { _enabled = false; };
     this.isOn    = function() { return _enabled;  };
 
-    this.getName = function() { return _name; }
+    this.getName = function() { return _name; };
 
     var _additive = true;
     /*
@@ -228,7 +228,7 @@
     };
 
     this.toString = function() { return "Logger[" + this.getName() + "]"; };
-  };
+  }
 
   Logger.prototype = {
     /*
@@ -344,7 +344,8 @@
   */
   JLog.getLogger = function(loggerName) {
     // Use anonymous logger if loggerName is not specified or invalid
-    if (!(typeof loggerName == "string")) loggerName = anonymousLoggerName;
+    if (typeof loggerName != "string")
+      loggerName = anonymousLoggerName;
 
     // Do not allow retrieval of the root logger by name
     if (loggerName == rootLoggerName)
