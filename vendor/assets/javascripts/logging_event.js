@@ -73,7 +73,7 @@ JLog.LoggingEvent.prototype = {
     Returns messages of the event joined with new line symbol.
   */
   getCombinedMessages: function() {
-    return (this.messages.length == 1) ? this.messages[0] : this.messages.join(newLine);
+    return (this.messages.length == 1) ? this.messages[0] : this.messages.join(JLog.newLine);
   },
   toString: function() {
     return "LoggingEvent[" + this.level + "]";
