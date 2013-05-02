@@ -24,10 +24,14 @@ On the client-side:
 
 Dependencies:
 
-    Underscore.JS
+    Underscore.js
+    jQuery
 
 Changelog:
 ----------
+* 0.2.2
+  * Removed jquery-rails dependency
+  * Fixed an issue with multi-line logging
 * 0.2.1 Bugfix
   * Added helpers to format Error backtraces
   * Removed the just_underscore dependancy from gemspecs

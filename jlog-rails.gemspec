@@ -15,6 +15,4 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://rubygems.org/gems/jlog-rails'
 
   s.rubyforge_project = "jlog-rails"
-
-  s.add_dependency "jquery-rails"
 end
