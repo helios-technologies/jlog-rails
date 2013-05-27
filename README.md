@@ -29,6 +29,8 @@ Dependencies:
 
 Changelog:
 ----------
+* 0.2.3
+  * Using console error/warn facility to make console appender more verbose
 * 0.2.2
   * Removed jquery-rails dependency
   * Fixed an issue with multi-line logging
