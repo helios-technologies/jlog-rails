@@ -1,15 +1,3 @@
-//= include mount
-
-//= include helpers
-//= include levels
-//= include logger
-//= include logging_event
-//= include layout
-//= include layouts/pattern
-//= include appender
-//= include appenders/ajax
-//= include appenders/console
-
 /**
  *
  * @author Marcus R Breese mailto:mbreese@users.sourceforge.net
@@ -41,4 +29,3 @@
 * @remixer Helios Technologies mailto:contact@heliostech.fr
 *
 **/
-
