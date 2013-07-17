@@ -13,24 +13,24 @@ JLog.ConsoleAppender = function() {
   */
   if (window.console && window.console.log) {
     this.calls = {};
-    this.calls[JLog.Level.DEBUG.name] = (window.console.debug || window.console.log).bind(window.console);
-    this.calls[JLog.Level.WARN.name] = (window.console.warn || window.console.log).bind(window.console);
-    this.calls[JLog.Level.ERROR.name] = (window.console.error || window.console.log).bind(window.console);
-    this.calls[JLog.Level.FATAL.name] = (window.console.fatal ||
+    this.calls[JLog.Level.DEBUG.name] = _.bind(window.console.debug || window.console.log, window.console);
+    this.calls[JLog.Level.WARN.name] = _.bind(window.console.warn || window.console.log, window.console);
+    this.calls[JLog.Level.ERROR.name] = _.bind(window.console.error || window.console.log, window.console);
+    this.calls[JLog.Level.FATAL.name] = _.bind(window.console.fatal ||
                                          window.console.error ||
-                                         window.console.log).bind(window.console);
-    this.append = function(loggingEvent) {
+                                         window.console.log, window.console);
+    this.append = _.bind(function(loggingEvent) {
       var message = this.getLayout().format(loggingEvent);
-      if(this.calls[loggingEvent.level.name])
+      if (this.calls[loggingEvent.level.name])
         this.calls[loggingEvent.level.name](message);
       else
         window.console.log(message);
-    }.bind(this);
+    }, this);
   }
 
-  this.toString = function() {
+  this.toString = _.bind(function() {
     return "JLog.ConsoleAppender(name=\"" + this.name + "\")";
-  }.bind(this);
+  }, this);
 };
 
 JLog.ConsoleAppender.prototype = new JLog.Appender();
